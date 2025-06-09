@@ -6,7 +6,18 @@ using MovieStoreC.BL.Interfaces;
 using MovieStoreC.DL;
 using MovieStoreC.Models.Configurations;
 using MovieStoreC.Validators;
+using Microsoft.Extensions.Caching.Memory;
 
+var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddSingleton<KafkaProducerService>();
+builder.Services.AddHostedService<KafkaConsumerService>();
+builder.Services.AddMemoryCache();
+builder.Services.AddScoped<IMovieService, MovieService>();
+
+var app = builder.Build();
+app.MapControllers();
+app.Run();
 namespace MovieStoreC
 {
     public class Program
